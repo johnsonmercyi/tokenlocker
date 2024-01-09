@@ -3,19 +3,18 @@ module.exports = {
     development: {
       host: "127.0.0.1",
       port: 8545,
-      network_id: "1337",
-      // timeout: 50000,
+      network_id: "1337"
     },
     dashboard: {
     }
   },
   compilers: {
     solc: {
-      version: "0.8.19",
+      version: "0.8.19"
     }
   },
   db: {
     enabled: false,
-    host: "127.0.0.1",
+    host: "127.0.0.1"
   }
 };

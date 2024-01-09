@@ -5,19 +5,18 @@ module.exports = {
     development: {
       host: "127.0.0.1",
       port: 8545,
-      network_id: "*",
-      // timeout: 120000,
+      network_id: "*"
     },
     dashboard: {},
     inf_soft_goerli: {
       network_id: 5,
       gasPrice: 100000000000,
-      provider: new HDWalletProvider(fs.readFileSync('c:\\Users\\OMEN\\SOFT_DEV\\WEB3-PROJECTS\\TokenLocker\\tokenlocker\\soft.env', 'utf-8'), "https://goerli.infura.io/v3/d2f9fee04cef4dfc930ae76c1ba9c42d")
+      provider: new HDWalletProvider(fs.readFileSync('c:\\Users\\SOFT\\SOFT_DEV\\WEB3-PROJECTS\\tokenlocker\\tokenlocker\\soft.env', 'utf-8'), "https://goerli.infura.io/v3/d2f9fee04cef4dfc930ae76c1ba9c42d")
     },
     inf_soft_sepolia: {
       network_id: 11155111,
       gasPrice: 100000000000,
-      provider: new HDWalletProvider(fs.readFileSync('c:\\Users\\OMEN\\SOFT_DEV\\WEB3-PROJECTS\\TokenLocker\\tokenlocker\\soft.env', 'utf-8'), "https://sepolia.infura.io/v3/d2f9fee04cef4dfc930ae76c1ba9c42d")
+      provider: new HDWalletProvider(fs.readFileSync('c:\\Users\\SOFT\\SOFT_DEV\\WEB3-PROJECTS\\tokenlocker\\tokenlocker\\soft.env', 'utf-8'), "https://sepolia.infura.io/v3/d2f9fee04cef4dfc930ae76c1ba9c42d")
     }
   },
   compilers: {
