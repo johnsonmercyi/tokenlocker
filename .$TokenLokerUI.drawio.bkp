@@ -1,0 +1,28 @@
+<mxfile host="app.diagrams.net" modified="2024-01-09T15:53:57.605Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="nRCUNR2OPZOAcv95fMld" version="22.1.15" type="device">
+  <diagram name="index.js" id="hxZLNedr09EQV7U13n4c">
+    <mxGraphModel dx="794" dy="446" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mJ1AcZ7n1f8XF6Vsi7XW-4" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.containers.browserWindow;rSize=0;strokeColor=#999900;strokeColor2=#008cff;strokeColor3=#c4c4c4;mainText=,;recursiveResize=0;fillColor=#000033;" vertex="1" parent="1">
+          <mxGeometry x="130" y="40" width="550" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ1AcZ7n1f8XF6Vsi7XW-5" value="Page 1" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.containers.anchor;fontSize=17;fontColor=#666666;align=left;whiteSpace=wrap;" vertex="1" parent="mJ1AcZ7n1f8XF6Vsi7XW-4">
+          <mxGeometry x="60" y="12" width="110" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ1AcZ7n1f8XF6Vsi7XW-6" value="https://localhost:3000" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.containers.anchor;rSize=0;fontSize=17;fontColor=#666666;align=left;" vertex="1" parent="mJ1AcZ7n1f8XF6Vsi7XW-4">
+          <mxGeometry x="130" y="60" width="250" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ1AcZ7n1f8XF6Vsi7XW-7" value="Manager Address" style="fillColor=none;strokeColor=none;html=1;fontSize=11;fontStyle=0;align=left;fontColor=#FFFFFF;fontStyle=1;fontSize=11" vertex="1" parent="mJ1AcZ7n1f8XF6Vsi7XW-4">
+          <mxGeometry x="130" y="158" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ1AcZ7n1f8XF6Vsi7XW-8" value="0x00...." style="rounded=1;arcSize=9;align=left;spacingLeft=5;strokeColor=#FFBA30;html=1;strokeWidth=2;fontSize=12;fillColor=#000033;fontColor=#FFFFFF;" vertex="1" parent="mJ1AcZ7n1f8XF6Vsi7XW-4">
+          <mxGeometry x="130" y="183" width="290" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ1AcZ7n1f8XF6Vsi7XW-9" value="Get in" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rrect;rSize=5;strokeColor=#FFBC26;strokeWidth=2;fillColor=none;fontColor=#FFFFFF;whiteSpace=wrap;align=center;verticalAlign=middle;spacingLeft=0;fontStyle=0;fontSize=16;spacing=5;" vertex="1" parent="mJ1AcZ7n1f8XF6Vsi7XW-4">
+          <mxGeometry x="130" y="240" width="90" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

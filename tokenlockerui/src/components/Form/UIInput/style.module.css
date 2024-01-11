@@ -1,0 +1,12 @@
+.input input {
+  background-color: transparent !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0.5rem !important;
+  color: white !important;
+  font-weight: 400 !important;
+}
+
+.label {
+  color: white !important;
+  font-weight: 400 !important;
+}

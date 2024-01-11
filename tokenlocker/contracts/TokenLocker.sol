@@ -8,7 +8,7 @@ contract TokenLockerFactory {
     // address[] public deployedTokenLoackers;
     mapping(address => TokenLocker) public deployedTokenLockers;
     mapping(address => bool) public hasCreatorATokenLocker;
-
+ 
     // Event declaration for TokenLocker creation
     event TokenLockerCreated(
         address indexed tokenLocker,
@@ -44,6 +44,7 @@ contract TokenLocker {
         IERC20 token;
         address payable beneficiary;
         uint256 amount;
+        uint256 lockdownDate;
         uint256 lockdownPeriod;
         string title;
         bool isReleased;
@@ -65,7 +66,8 @@ contract TokenLocker {
         address indexed beneficiary,
         uint256 amount,
         string title,
-        uint period
+        uint period,
+        uint lockdownDate
     );
 
     event TokenTransferApproved(
@@ -134,6 +136,7 @@ contract TokenLocker {
                 token: token,
                 beneficiary: beneficiary,
                 amount: amount,
+                lockdownDate: block.timestamp,
                 lockdownPeriod: lockdownPeriod,
                 title: title,
                 isReleased: false
@@ -162,7 +165,8 @@ contract TokenLocker {
             lockedToken.beneficiary,
             amount,
             lockedToken.title,
-            lockedToken.lockdownPeriod
+            lockedToken.lockdownPeriod,
+            lockedToken.lockdownDate
         );
     }
 
