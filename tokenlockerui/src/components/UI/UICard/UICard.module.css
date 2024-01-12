@@ -1,0 +1,77 @@
+/*Mobile First Style*/
+.card,
+.header,
+.amount,
+.body {
+  display        : flex;
+  flex-direction : column;
+  justify-content: space-evenly;
+  align-items    : flex-start;
+}
+
+.card * {
+  /* border: 1px dotted orange; */
+  margin: 0.15rem 0;
+}
+
+.card {
+  width        : 100%;
+  height       : auto;
+  padding      : 1rem;
+  border       : 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+
+  /* margin: 0 1rem 0 0; */
+
+  background-color: transparent;
+
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.header {
+  width          : 100%;
+  height         : 2.5rem;
+  flex-direction : row;
+  justify-content: space-between;
+  align-items    : center;
+}
+
+.header .title {
+  color      : white;
+  width      : 100%;
+  font-size  : 1.5rem;
+  font-weight: 600;
+}
+
+.header .indicator {
+  width : 1.5rem;
+  height: 1.28rem;
+
+  border-radius   : 100%;
+  background-color: red;
+  margin          : 0.3rem;
+}
+
+.amount {
+  width: 100%;
+  color: #FFAE21;
+}
+
+.body {
+  width     : 100%;
+  height    : 3.5rem;
+  word-break: break-all;
+  font-size : 1.2rem;
+  color     : white;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {
+  /* .card {
+    width        : 20rem;
+  } */
+}

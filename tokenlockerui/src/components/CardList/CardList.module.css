@@ -1,0 +1,59 @@
+/*Mobile First Style*/
+.cardList {
+  width : 100%;
+  height: auto;
+
+  display        : flex;
+  flex-wrap      : wrap;
+  justify-content: space-around;
+  align-items    : center;
+  gap            : 16px;
+
+  padding: 1rem 0;
+
+}
+
+.item {
+  flex            : 0 0 calc(100% - 16px);
+  max-width       : calc(100% - 16px);
+  box-sizing      : border-box;
+  margin-bottom   : 6px;
+  /* border       : 1px solid #ccc; */
+  /* padding      : 16px; */
+  text-align      : left;
+  cursor          : pointer;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {
+  .cardList {
+    justify-content: space-between;
+  }
+
+  .item {
+    flex     : 0 0 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+  }
+}
+
+@media (min-width: 992px) {
+  .cardList {
+    justify-content: space-between;
+  }
+
+  .item {
+    flex     : 0 0 calc(33.33% - 16px);
+    max-width: calc(33.33% - 16px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardlist {
+    justify-content: space-around;
+  }
+
+  .item {
+    flex     : 0 0 calc(25% - 16px);
+    max-width: calc(25% - 16px);
+  }
+}

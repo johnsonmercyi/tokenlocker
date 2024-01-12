@@ -1,0 +1,23 @@
+/*Mobile First Style*/
+.select {}
+
+.select .ui.selection.dropdown {
+  background: transparent !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.select .ui.selection.dropdown .menu {
+  background: transparent !important;
+}
+
+.select .ui.selection.dropdown .menu>.item {
+  background: transparent !important;
+}
+
+.select label {
+  color      : white !important;
+  font-weight: 400 !important;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {}

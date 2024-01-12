@@ -4,9 +4,14 @@ const GlobalStateContext = createContext();
 
 export const GlobalStateProvider = ({ children }) => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const [selectedLockedToken, setSelectedLockedToken] = useState(null);
 
   return (
-    <GlobalStateContext.Provider value={{ isHeaderVisible, setIsHeaderVisible }}>
+    <GlobalStateContext.Provider
+      value={{
+        isHeaderVisible, setIsHeaderVisible,
+        selectedLockedToken, setSelectedLockedToken
+      }}>
       {children}
     </GlobalStateContext.Provider>
   );

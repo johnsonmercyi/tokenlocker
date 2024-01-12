@@ -25,12 +25,6 @@ const metadata = {
   icons: [''],
 };
 
-// export const web3Modal = createWeb3Modal({
-//   ethersConfig: defaultConfig({ metadata }),
-//   chains: [testnet],
-//   projectId,
-// });
-
 createWeb3Modal({
   ethersConfig: defaultConfig({ metadata }),
   chains: [testnet],

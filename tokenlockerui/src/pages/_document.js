@@ -8,7 +8,8 @@ function Document({ props }) {
       <body style={{ 
         background: "rgb(0, 0, 31)",
         color: "rgb(255, 255, 255)",
-        // fontFamily: "Helvetica",
+        fontFamily: `system-ui,-apple-system,
+        BlinkMacSystemFont, ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono'`,
       }}>
         <Main />
         <NextScript />

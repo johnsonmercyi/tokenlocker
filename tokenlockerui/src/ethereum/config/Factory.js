@@ -11,6 +11,8 @@ const factoryInstance = async (walletProvider) => {
 
   const instance = new Contract(factoryAddress, factoryAbi.abi, signer);
 
+  
+
   return instance;
 }
 
