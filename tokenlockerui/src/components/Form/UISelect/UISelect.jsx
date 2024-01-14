@@ -1,16 +1,19 @@
 import React from "react";
-import { FormField, Select } from "semantic-ui-react";
+import { Select } from "semantic-ui-react";
 import styles from "./style.module.css";
 
-const UISelect = ({ options, label, placeholder }) => {
+const UISelect = ({ options, label, value, onChangeHandler, placeholder }) => {
+
   return (
-    <FormField
-      className={styles.select}
-      control={Select}
-      label={label}
-      options={options}
-      placeholder={placeholder}
-    />
+    <div className={styles.UISelect}>
+      <label>{label}</label>
+      <Select
+        value={value}
+        className={styles.select}
+        placeholder={placeholder}
+        options={options}
+        onChange={onChangeHandler} />
+    </div>
   );
 }
 

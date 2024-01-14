@@ -1,0 +1,15 @@
+/*Mobile First Style*/
+.UILoaderPage {
+  width: 100%;
+  height: 20vh;
+  background-color: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {
+
+}

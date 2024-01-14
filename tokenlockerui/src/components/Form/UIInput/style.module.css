@@ -1,7 +1,11 @@
+.input {
+  margin-bottom: 1rem;
+}
+
 .input input {
   background-color: transparent !important;
   border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 0.5rem !important;
+  border-radius: 0.3rem !important;
   color: white !important;
   font-weight: 400 !important;
 }
@@ -9,4 +13,20 @@
 .label {
   color: white !important;
   font-weight: 400 !important;
+}
+
+.input.rounded input {
+  border-radius: 0.3rem !important;
+}
+
+.input.rounded_left input {
+  border-radius: 0.3rem 0 0 0.3rem !important;
+  margin-right : 0 !important;
+  border-right: none !important;
+}
+
+.input.rounded_right input{
+  border-radius: 0 0.3rem 0.3rem 0 !important;
+  margin-left  : 0 !important;
+  border-left: none !important;
 }

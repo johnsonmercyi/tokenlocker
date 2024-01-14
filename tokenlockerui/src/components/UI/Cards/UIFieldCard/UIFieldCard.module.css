@@ -1,0 +1,43 @@
+/*Mobile First Style*/
+.UIFieldCard {
+  width : 100%;
+  height: auto;
+
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+  align-items    : flex-start;
+}
+
+.headerWrapper {
+  width : 100%;
+  height: auto;
+
+  display        : flex;
+  justify-content: flex-start;
+  align-items    : center;
+}
+
+.headerWrapper .label {
+  width: fit-content;
+  padding: 1rem 0;
+}
+
+.headerWrapper .indicator {
+  width : 1.5rem;
+  height: 1.4rem;
+
+  border-radius   : 100%;
+  background-color: transparent;
+  margin          : 0.3rem;
+}
+
+.content {
+  width: 100%;
+  text-align: left;
+  color: #FFAE21;
+  text-decoration: underline;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {}

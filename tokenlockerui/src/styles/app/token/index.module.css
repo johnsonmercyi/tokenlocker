@@ -1,0 +1,14 @@
+/*Mobile First Style*/
+.customRow {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.customDivider {
+  margin: 0 0 0.5rem 0 !important;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {
+
+}

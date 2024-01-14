@@ -10,9 +10,7 @@ const factoryInstance = async (walletProvider) => {
   const signer = await ethersProvider.getSigner();
 
   const instance = new Contract(factoryAddress, factoryAbi.abi, signer);
-
   
-
   return instance;
 }
 

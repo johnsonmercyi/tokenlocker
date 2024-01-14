@@ -26,7 +26,10 @@ export default function Home() {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
   const router = useRouter();
-  const { isHeaderVisible, setIsHeaderVisible } = useGlobalState();
+  const { 
+    isHeaderVisible, setIsHeaderVisible,
+    setTokenLockerAddress 
+  } = useGlobalState();
 
   const [loginLoading, setLoginLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -67,6 +70,9 @@ export default function Home() {
         } else {
           // If not a manager, create a new TokenLocker
           const createTokenLockerTx = await factory.createTokenLocker(managerAddress, '');
+
+          // Fetch the TokenLocker address
+          const tokenLockerAddress = await factory.getDeployedTokenLocker(managerAddress);
 
           // Wait for the transaction receipt
           const receipt = await createTokenLockerTx.wait();

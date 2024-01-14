@@ -1,8 +1,8 @@
 import React from 'react';
-import UICard from '../UI/UICard/UICard';
+import UICard from '../UI/Cards/UICard/UICard';
 import styles from './CardList.module.css';
 import Link from 'next/link';
-import { Grid, GridColumn } from 'semantic-ui-react';
+import { Grid, GridColumn, Select } from 'semantic-ui-react';
 import { useGlobalState } from '@/ethereum/config/context/GlobalStateContext';
 import { useRouter } from 'next/router';
 
@@ -29,7 +29,6 @@ const CardList = ({ data = [], ...props }) => {
               <UICard
                 title={tokenObj.title}
                 token={tokenObj.token}
-                tokenName={tokenObj.tokenName}
                 amount={tokenObj.amount}
                 beneficiary={tokenObj.beneficiary}
                 lockdownDate={tokenObj.lockdownDate}

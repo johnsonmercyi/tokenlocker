@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import tokenLockerInstance from "@/ethereum/config/TokenLocker";
 import { lock } from "ethers";
 import NoTokens from "@/components/NoTokens/NoTokens";
+import UILoaderPage from "@/components/UILoaderPage/UILoaderPage";
 
 
 const textTokens = [
@@ -69,24 +70,40 @@ const ShowTokenLockerSpace = (props) => {
   const { manager } = props;
 
   const [lockedTokens, setLockedTokens] = useState([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
 
   useEffect(() => {
     const init = async () => {
+
+      setDataLoading(true);
 
       const factory = await factoryInstance(walletProvider);
       const tokenLockerAddress = await factory.getDeployedTokenLocker(manager);
 
       const tokenLocker = await tokenLockerInstance(tokenLockerAddress, walletProvider);
       const tokensLocked = await tokenLocker.getLockedTokens();
-      // console.log("INSTANCE: ", factory, tokenLocker); 
 
-      setLockedTokens(tokensLocked);
+      // Map the solidity struct to an array of objects
+      const formattedTokens = tokensLocked.map(token => ({
+        token: token[0],
+        beneficiary: token[1],
+        amount: (token[2] / (10n ** 18n)).toString(), // Convert BigNumber to string
+        lockdownDate: new Date(Number(token[3]) * 1000),
+        lockdownPeriod: Number(token[4]),
+        title: token[5],
+        isReleased: token[6],
+      }));
+
+      // console.log("LOCKED TOKENS: ", formattedTokens); 
+
+      setLockedTokens(formattedTokens);
+      setDataLoading(false);
 
     };
 
     init();
-    setIsHeaderVisible(true);
+    
   }, [walletProvider]);
 
   const onClickHadler = () => {
@@ -105,6 +122,30 @@ const ShowTokenLockerSpace = (props) => {
     return {};
   };
 
+  const renderComponent = () => {
+    if (dataLoading) {
+      // Placeholders loading...
+      setIsHeaderVisible(false);
+      return (
+        <UILoaderPage content={"Preparing your space..."}/>
+      );
+    } else {
+      if (lockedTokens.length) {
+        setIsHeaderVisible(true);
+        return (
+          <CardList data={lockedTokens} />
+        );
+      } else {
+        return (
+          <NoTokens
+            text={"You have not locked any tokens yet."}
+            buttonText={"Lock a token here!"}
+            onClickHandler={onClickHadler} />
+        );
+      }
+    }
+  }
+
   return (
     <div style={{
       width: '100%',
@@ -112,18 +153,11 @@ const ShowTokenLockerSpace = (props) => {
       ...moreStyles()
     }}>
       {
-        lockedTokens.length > 0 ? <h1>Locked Tokens</h1> : null
+        lockedTokens.length > 0 || !dataLoading ? <h1>Locked Tokens</h1> : null
       }
 
       {/* CardList container Cards */}
-      {
-        lockedTokens.length ?
-          <CardList data={lockedTokens} /> :
-          <NoTokens
-            text={"You have not locked any tokens yet."}
-            buttonText={"Lock a token here!"}
-            onClickHandler={onClickHadler} />
-      }
+      {renderComponent()}
     </div>
   );
 }

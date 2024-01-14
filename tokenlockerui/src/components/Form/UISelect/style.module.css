@@ -1,22 +1,25 @@
 /*Mobile First Style*/
-.select {}
+.UISelect {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
-.select .ui.selection.dropdown {
-  background: transparent !important;
+  margin-bottom: 1rem;
+}
+
+.UISelect .select {
+  width: 100%;
+  background-color: transparent !important;
+  color: white !important;
   border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-.select .ui.selection.dropdown .menu {
-  background: transparent !important;
-}
-
-.select .ui.selection.dropdown .menu>.item {
-  background: transparent !important;
-}
-
-.select label {
-  color      : white !important;
-  font-weight: 400 !important;
+.UISelect label {
+  width: 100%;
+  margin-bottom: 0.3rem;
 }
 
 /*Devices larger than mobile phone*/
