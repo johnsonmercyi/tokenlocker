@@ -7,10 +7,11 @@ import { Grid } from "semantic-ui-react";
 import UISelect from "@/components/Form/UISelect/UISelect";
 import UIButton from "@/components/UI/UIButton/UIButton";
 import UIMessage from "@/components/UI/UIMessage";
-import { useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
+import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
 import tokenInstance from "@/ethereum/config/ERC20";
 import factoryInstance from "@/ethereum/config/Factory";
 import tokenLockerInstance from "@/ethereum/config/TokenLocker";
+import UIModal from "@/components/UIModal/UIModal";
 
 export async function getServerSideProps(props) {
   const { manager } = props.query;
@@ -23,6 +24,7 @@ export async function getServerSideProps(props) {
 
 const LockNewToken = (props) => {
   const { setIsHeaderVisible } = useGlobalState();
+  const { open } = useWeb3Modal();
   const { Row, Column } = Grid;
   const options = [
     { key: "empty", text: "", value: "" },
@@ -41,6 +43,29 @@ const LockNewToken = (props) => {
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogHeader, setDialogHeader] = useState("");
+  const [dialogContent, setDialogContent] = useState("");
+  const [dialogButtonText, setDialogButtonText] = useState("");
+  const [dialogButtonIcon, setDialogButtonIcon] = useState("");
+  const [dialogHeaderIcon, setDialogHeaderIcon] = useState("");
+  const [dialogHeaderColor, setDialogHeaderColor] = useState("");
+
+  const onConnectWalletHandler = (event) => {
+    try {
+      open();
+
+      setDisabled(false);
+      setLoading(false);
+      setOpenDialog(false);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  }
+
+  const openDialogHandler = (shouldOpen) => {
+    setOpenDialog(shouldOpen);
+  }
 
   const onTokenChangedHandler = (event, { value }) => {
     setTokenAddress(value);
@@ -110,60 +135,67 @@ const LockNewToken = (props) => {
 
     try {
       // Check if the user's wallet is connected
-
-
-      const bigIntAmount = BigInt(amount);
-      const amountToApprove = bigIntAmount * (10n ** 18n);
-
-      const daysInSeconds = (24 * 60 * 60);
-      const lockdownPeriodInSeconds = daysInSeconds * Number(lockdownPeriod);
-
-      const factory = await factoryInstance(walletProvider);
-      const tokenLockerAddress = await factory.getDeployedTokenLocker(manager);
-      const tokenLocker = await tokenLockerInstance(tokenLockerAddress, walletProvider);
-
-      const tokenObj = await tokenInstance(tokenAddress, walletProvider);
-      const token = tokenObj.instance;
-      const signer = tokenObj.signer;
-
-
-      const tokenWithSigner = token.connect(signer);
-
-
-      const tokenApproval = await tokenWithSigner.approve(tokenLockerAddress, amountToApprove);
-
-      const approvalReceipt = await tokenApproval.wait();
-
-      if (approvalReceipt.status === 1) {
-        // Call the deposit method
-        const depositTransaction = await tokenLocker.deposit(
-          tokenAddress,
-          beneficiary,
-          amountToApprove,
-          lockdownPeriodInSeconds,
-          title
-        );
-
-        // Fetch deposit transaction hash
-        const depositTransactionHash = depositTransaction.hash;
-        console.log('Deposit Transaction Hash:', depositTransactionHash);
-
-        // Event
-        tokenLocker.on("TokensDeposited", (sender, beneficiary, amount, title) => {
-          console.log('TokensDeposited Event:', sender, beneficiary, amount, title);
-          // Handle the event data as needed
-        });
-
-        // Wait for the transaction to be mined
-        const depositReceipt = await depositTransaction.wait();
-
-        // Get the transaction receipt
-        console.log('Deposit Transaction Receipt:', depositReceipt);
-
+      if (!isConnected) {
+        setOpenDialog(true);
+        setDialogHeader("Wallet Disconnected!");
+        setDialogContent("Your wallet is disconnected. Please click the button below to try reconnecting your wallet.");
+        setDialogButtonText("Connect Wallet");
+        setDialogButtonIcon("google wallet");
+        setDialogHeaderIcon("unlink");
+        setDialogHeaderColor("red");
       } else {
-        throw Error("Transaction approval failed.");
-      }
+        const bigIntAmount = BigInt(amount);
+        const amountToApprove = bigIntAmount * (10n ** 18n);
 
+        const daysInSeconds = (24 * 60 * 60);
+        const lockdownPeriodInSeconds = daysInSeconds * Number(lockdownPeriod);
+
+        const factory = await factoryInstance(walletProvider);
+        const tokenLockerAddress = await factory.getDeployedTokenLocker(manager);
+        const tokenLocker = await tokenLockerInstance(tokenLockerAddress, walletProvider);
+
+        const tokenObj = await tokenInstance(tokenAddress, walletProvider);
+        const token = tokenObj.instance;
+        const signer = tokenObj.signer;
+
+
+        const tokenWithSigner = token.connect(signer);
+
+
+        const tokenApproval = await tokenWithSigner.approve(tokenLockerAddress, amountToApprove);
+
+        const approvalReceipt = await tokenApproval.wait();
+
+        if (approvalReceipt.status === 1) {
+          // Call the deposit method
+          const depositTransaction = await tokenLocker.deposit(
+            tokenAddress,
+            beneficiary,
+            amountToApprove,
+            lockdownPeriodInSeconds,
+            title
+          );
+
+          // Fetch deposit transaction hash
+          const depositTransactionHash = depositTransaction.hash;
+          console.log('Deposit Transaction Hash:', depositTransactionHash);
+
+          // Event
+          tokenLocker.on("TokensDeposited", (sender, beneficiary, amount, title) => {
+            console.log('TokensDeposited Event:', sender, beneficiary, amount, title);
+            // Handle the event data as needed
+          });
+
+          // Wait for the transaction to be mined
+          const depositReceipt = await depositTransaction.wait();
+
+          // Get the transaction receipt
+          console.log('Deposit Transaction Receipt:', depositReceipt);
+
+        } else {
+          throw Error("Transaction approval failed.");
+        }
+      }
 
     } catch (error) {
       if (String(error.message).includes("code=ACTION_REJECTED")) {
@@ -172,6 +204,7 @@ const LockNewToken = (props) => {
         setErrorMessage(error.message);
       }
       setLoading(false);
+      setDisabled(false);
     }
   }
 
@@ -262,6 +295,18 @@ const LockNewToken = (props) => {
 
         </Grid>
       </UIForm>
+
+      <UIModal
+        header={dialogHeader}
+        content={dialogContent}
+        buttonText={dialogButtonText}
+        buttonIcon={dialogButtonIcon}
+        headerIcon={dialogHeaderIcon}
+        headerColor={dialogHeaderColor}
+        open={openDialog}
+        openDialogHandler={openDialogHandler}
+        buttonClickHandler={onConnectWalletHandler}
+      />
     </div>
   );
 }
