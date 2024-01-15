@@ -28,7 +28,7 @@ export default function Home() {
   const router = useRouter();
   const { 
     isHeaderVisible, setIsHeaderVisible,
-    setTokenLockerAddress 
+    setTokenLockerAddress, setValidWalletForThisPage 
   } = useGlobalState();
 
   const [loginLoading, setLoginLoading] = useState(false);
@@ -123,21 +123,21 @@ export default function Home() {
 
             {
               isConnected ?
-                <UIButton
+                (<UIButton
                   key={"login_submit_button"}
                   disabled={!managerAddress || managerAddress.length < 42 || managerAddress.length > 42}
                   loading={loginLoading}
                   icon={"arrow right"}
                   labelPosition={"left"}
                   content={"Sign in"}
-                  type={"submit"} /> :
+                  type={"submit"} />) :
 
-                <UIButton
+                (<UIButton
                   key={"login_connect_button"}
                   icon={"google wallet"}
                   labelPosition={"left"}
                   content={"Connect you wallet!"}
-                  onClickHandler={onConnectWalletHandler} />
+                  onClickHandler={onConnectWalletHandler} />)
             }
 
             <UIMessage

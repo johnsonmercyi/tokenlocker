@@ -32,8 +32,15 @@ const UICard = ({ title, amount, token, beneficiary, lockdownDate, lockdownPerio
         <span className={styles.title}>{title}</span>
         <span className={styles.indicator}
           style={{
-            backgroundColor: `${remainingDays === 0 ? 'green' : remainingDays > elapsedDays ? 'red' : 'orange'}`,
-            boxShadow: `${remainingDays === 0 ? '0px 0px 20px green' : remainingDays > elapsedDays ? '0px 0px 20px red' : '0px 0px 20px orange'}`,
+            backgroundColor: `${
+              remainingDays === 0 ? 'green' : 
+              elapsedDays < remainingDays  ? 'red' : 
+              elapsedDays >= remainingDays ? 'orange' : ""}`,
+            boxShadow: `${
+              remainingDays === 0 ? '0px 0px 20px green' : 
+              elapsedDays < remainingDays ? '0px 0px 20px red' : 
+              elapsedDays >= remainingDays ? '0px 0px 20px orange' : 
+              "0px 0px 20px transparent"}`,
           }}></span>
       </div>
       <div className={styles.amount}>{`${amount} ${tokenSymbol}`}</div>

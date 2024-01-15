@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./UIFieldCard.module.css";
 
 const UIFieldCard = ({ label, labelSize, content, indicatorColor, ...props }) => {
-  console.log(indicatorColor);
   return (
     <div className={styles.UIFieldCard}>
       <div className={styles.headerWrapper}>

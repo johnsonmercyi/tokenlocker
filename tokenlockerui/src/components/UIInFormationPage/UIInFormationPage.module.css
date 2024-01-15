@@ -1,11 +1,21 @@
 /*Mobile First Style*/
-.UILoaderPage {
+.UIInFormationPage {
   width: 100%;
-  background-color: transparent;
+  height: 50vh;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.header {
+  color: #FFAE21;
+}
+
+.content {
+  text-align: center;
+  font-size: 1.2rem;
 }
 
 /*Devices larger than mobile phone*/

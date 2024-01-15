@@ -17,15 +17,18 @@ import { useWeb3ModalProvider } from "@web3modal/ethers/react";
 import tokenInstance from "@/ethereum/config/ERC20";
 import styles from '@/styles/app/token/index.module.css';
 import UIButton from "@/components/UI/UIButton/UIButton";
+import ValidateWalletConnection from "@/components/WalletConnectionValidator/ValidateWalletConnection";
 
 const ViewLockedToken = ({ ...props }) => {
-  const { selectedLockedToken, setIsHeaderVisible } = useGlobalState();
+  const { selectedLockedToken } = useGlobalState();
   const { walletProvider } = useWeb3ModalProvider();
   const [lockedToken, setLockedToken] = useState(null);
   const [lockdownDate, setLockdownDate] = useState(null);
   const [remainingDays, setRemainingDays] = useState("");
   const [elapsedDays, setElapsedDays] = useState("");
   const [tokenSymbol, setTokenSymbol] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [lockdownPeriod, setLockdownPeriod] = useState(0);
   const { Row, Column } = Grid;
 
   useEffect(() => {
@@ -53,18 +56,20 @@ const ViewLockedToken = ({ ...props }) => {
       const symbol = await tokenObj.instance.symbol();
       setTokenSymbol(symbol);
     }
+
     getTokenSymbol();
 
-    
+
     setLockedToken(token);
-    setLockdownDate(intlDateFormat(token.lockdownDate))
+    setLockdownDate(intlDateFormat(token.lockdownDate));
+    setAmount(usNumberFormat(token.amount));
     setRemainingDays(days.remainingDays);
     setElapsedDays(days.elapsedDays);
-    setIsHeaderVisible(true);
+    setLockdownPeriod(token.lockdownPeriod / (24 * 60 * 60));
   }, []);
 
   return (
-    <div>
+    <ValidateWalletConnection>
       <Grid>
         <Row>
           <Column mobile={16} tablet={8} computer={8}>
@@ -72,16 +77,18 @@ const ViewLockedToken = ({ ...props }) => {
               label={lockedToken && lockedToken.title}
               labelSize={"1.8rem"}
               content={lockedToken && lockedToken.token}
-              indicatorColor={lockedToken && `${remainingDays === 0 ? 'green' :
-                remainingDays > elapsedDays ? 'red' :
-                  'orange'}`} />
+              indicatorColor={
+                lockedToken && `${remainingDays === 0 ? 'green' :
+                  elapsedDays < remainingDays ? 'red' :
+                    elapsedDays >= remainingDays ? 'orange' :
+                      "transparent"}`} />
           </Column>
           <Column mobile={16} tablet={8} computer={8}>
             <UIItemsCard
               hAlign={"right"}
               items={[
                 {
-                  content: lockedToken && usNumberFormat(lockedToken.amount),
+                  content: amount,
                   color: "#FFAE21",
                   size: "2rem",
                   weight: "700"
@@ -159,7 +166,7 @@ const ViewLockedToken = ({ ...props }) => {
               hAlign={"left"}
               items={[
                 {
-                  content: lockedToken && lockedToken.lockdownPeriod / (24 * 60 * 60),
+                  content: lockdownPeriod,
                   color: "#FFAE21",
                   size: "1.4rem",
                   weight: "700",
@@ -179,7 +186,7 @@ const ViewLockedToken = ({ ...props }) => {
               hAlign={"right"}
               items={[
                 {
-                  content: lockedToken && remainingDays,
+                  content: remainingDays,
                   color: "#FFAE21",
                   size: "1.4rem",
                   weight: "700",
@@ -203,13 +210,14 @@ const ViewLockedToken = ({ ...props }) => {
         <Row>
           <Column mobile={16} tablet={8} computer={8}>
             <UIButton
+              disabled={remainingDays > 0}
               icon={"unlock"}
               labelPosition={"left"}
               content={"Release Token"} />
           </Column>
         </Row>
       </Grid>
-    </div>
+    </ValidateWalletConnection> 
   );
 }
 

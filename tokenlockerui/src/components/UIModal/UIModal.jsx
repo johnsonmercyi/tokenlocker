@@ -14,7 +14,7 @@ const UIModal = ({ open = false, header, content, buttonText, buttonIcon, header
       onOpen={() => openDialogHandler(true)}
     // trigger={<Button>Show Modal</Button>}
     >
-      <Header icon={headerIcon} color={headerColor} content={header} />
+      <Header icon={headerIcon} color={headerColor || "black"} content={header} />
       <ModalContent>
         <ModalDescription style={{color: "black", fontSize: "1.2rem"}}>
           {content}

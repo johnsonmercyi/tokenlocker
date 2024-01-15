@@ -4,10 +4,11 @@ import { Dimmer, Image, Loader, Segment } from 'semantic-ui-react';
 import { useGlobalState } from '@/ethereum/config/context/GlobalStateContext';
 
 
-const UILoaderPage = ({ content, ...props }) => {
+const UILoaderPage = ({ indeterminate, content, ...props }) => {
   return (
     <div className={styles.UILoaderPage}>
       <Loader
+        indeterminate={indeterminate}
         active
         inline="centered" 
         content={`${content || "Loading..."}`} />
