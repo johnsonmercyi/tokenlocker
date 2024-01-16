@@ -33,14 +33,18 @@ export default function Home() {
 
   const [loginLoading, setLoginLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [clientReady, setClientReady] = useState(false);
 
   useEffect(() => {
     setIsHeaderVisible(false);
-    if (isConnected) {
+    if (walletProvider && isConnected) {
       setManagerAddress(address);
+      setClientReady(true);
+    } else {
+      setClientReady(false);
     }
 
-  }, [isConnected]);
+  }, [walletProvider, isConnected]);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -122,7 +126,7 @@ export default function Home() {
               onChangeHandler={onChangeHandler} />
 
             {
-              isConnected ?
+              clientReady ?
                 (<UIButton
                   key={"login_submit_button"}
                   disabled={!managerAddress || managerAddress.length < 42 || managerAddress.length > 42}

@@ -1,5 +1,6 @@
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react';
 
+// Web3Modal developer project id
 const projectId = 'a8b05f96035d83f51b664ade0542d49e';
 
 const mainnet = {
@@ -8,6 +9,14 @@ const mainnet = {
   currency: 'ETH',
   explorerUrl: 'https://etherscan.io',
   rpcUrl: 'https://cloudflare-eth.com',
+};
+
+const sepolia = {
+  chainId: 11155111,
+  name: 'Sepolia',
+  currency: 'ETH',
+  explorerUrl: 'https://sepolia.etherscan.io/',
+  rpcUrl: `${process.env.NEXT_PUBLIC_INFURA_URL}`,
 };
 
 const testnet = {
@@ -27,7 +36,7 @@ const metadata = {
 
 createWeb3Modal({
   ethersConfig: defaultConfig({ metadata }),
-  chains: [testnet],
+  chains: [sepolia],
   projectId,
 });
 

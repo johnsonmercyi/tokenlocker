@@ -29,7 +29,7 @@ const LockNewToken = (props) => {
   const { Row, Column } = Grid;
   const options = [
     { key: "empty", text: "", value: "" },
-    { key: "sftc", text: "SFTC", value: "0xCebD093EdDfF9E8be5741FC52225385314de25Fd" },
+    { key: "sftc", text: "SFTC", value: `${process.env.NEXT_PUBLIC_TOKEN_ADDRESS}` },
   ];
   const { manager } = props;
 

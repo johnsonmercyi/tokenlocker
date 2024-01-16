@@ -77,7 +77,7 @@ contract TokenLocker {
     );
 
     modifier restricted() {
-        require(msg.sender == manager);
+        require(msg.sender == manager, "The manager is not making this call");
         _;
     }
 
@@ -153,9 +153,11 @@ contract TokenLocker {
             block.timestamp >= lockedToken.lockdownPeriod,
             "Release time has not arrived yet!"
         );
-        uint256 amount = lockedToken.token.balanceOf(address(this));
-        require(amount > 0, "No tokens to release");
-        lockedToken.token.transfer(lockedToken.beneficiary, amount);
+
+        // uint256 amount = lockedToken.token.balanceOf(address(this));
+        // uint256 amount = lockedToken.token.balanceOf(address(this));
+    require(lockedToken.amount > 0, "No tokens to release!");
+        lockedToken.token.transfer(lockedToken.beneficiary, lockedToken.amount);
 
         // Update the status of the locked token
         lockedToken.isReleased = true;
@@ -163,7 +165,7 @@ contract TokenLocker {
         emit TokensReleased(
             msg.sender,
             lockedToken.beneficiary,
-            amount,
+            lockedToken.amount,
             lockedToken.title,
             lockedToken.lockdownPeriod,
             lockedToken.lockdownDate

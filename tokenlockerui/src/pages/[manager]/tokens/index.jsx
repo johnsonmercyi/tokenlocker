@@ -67,7 +67,7 @@ const ShowTokenLockerSpace = (props) => {
           isReleased: token[6],
         }));
 
-        // console.log("LOCKED TOKENS: ", formattedTokens); 
+        console.log("LOCKED TOKENS: ", formattedTokens); 
 
         setLockedTokens(formattedTokens);
         setDataLoading(false);
@@ -81,7 +81,7 @@ const ShowTokenLockerSpace = (props) => {
 
   useEffect(() => {
     // Show header when data is loaded
-    if (!dataLoading && lockedTokens.length) {
+    if (!dataLoading && lockedTokens.length || !dataLoading && !lockedTokens.length) {
       setIsHeaderVisible(true);
     } else {
       setLoaderMessage("Preparing your space...");
@@ -118,7 +118,8 @@ const ShowTokenLockerSpace = (props) => {
   }
 
   const renderComponent = () => {
-    if (dataLoading || lockedTokens.length === 0) {
+    if (dataLoading && lockedTokens.length === 0) {
+
       return (
         <UILoaderPage
           indeterminate={indeterminateLoader}

@@ -18,10 +18,18 @@ import tokenInstance from "@/ethereum/config/ERC20";
 import styles from '@/styles/app/token/index.module.css';
 import UIButton from "@/components/UI/UIButton/UIButton";
 import ValidateWalletConnection from "@/components/WalletConnectionValidator/ValidateWalletConnection";
+import { useRouter } from "next/router";
+import tokenLockerInstance from "@/ethereum/config/TokenLocker";
+import UIMessage from "@/components/UI/UIMessage";
+import UIInFormationPage from "@/components/UIInFormationPage/UIInFormationPage";
+import factoryInstance from "@/ethereum/config/Factory";
 
 const ViewLockedToken = ({ ...props }) => {
-  const { selectedLockedToken } = useGlobalState();
+  const { selectedLockedToken, setIsHeaderVisible } = useGlobalState();
   const { walletProvider } = useWeb3ModalProvider();
+  const router = useRouter();
+  const { manager } = router.query;
+
   const [lockedToken, setLockedToken] = useState(null);
   const [lockdownDate, setLockdownDate] = useState(null);
   const [remainingDays, setRemainingDays] = useState("");
@@ -29,7 +37,11 @@ const ViewLockedToken = ({ ...props }) => {
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [amount, setAmount] = useState(0);
   const [lockdownPeriod, setLockdownPeriod] = useState(0);
+  const [navigate, setNavigate] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loadButton, setLoadButton] = useState(false);
   const { Row, Column } = Grid;
+
 
   useEffect(() => {
     if (!isExistsInLocalStorage("selectedLockedToken")) {
@@ -68,156 +80,224 @@ const ViewLockedToken = ({ ...props }) => {
     setLockdownPeriod(token.lockdownPeriod / (24 * 60 * 60));
   }, []);
 
+  const releaseFundHandler = async (event) => {
+    try {
+
+      setLoadButton(true);
+      setErrorMessage("");
+      // console.log("LOCKED TOKEN: ", lockedToken);
+      const factory = await factoryInstance(walletProvider);
+      const tokenLockerAddress = await factory.getDeployedTokenLocker(manager);
+      const tokenLocker = await tokenLockerInstance(tokenLockerAddress, walletProvider);
+
+      // const lockedT = await tokenLocker.lockedTokens(lockedToken.index);
+
+      // console.log("TOKEN LOCKER ADDRESS: ", tokenLockerAddress);
+      // console.log("TOKEN LOCKER: ", tokenLocker);
+      // console.log("TOKEN INDEX: ", lockedToken.index);
+      // console.log("LOCKED TOKEN: ", lockedT);
+
+      const releaseTokenTransX = await tokenLocker.release(lockedToken.index);
+
+      
+      // Wait for the transaction to be mined
+      const releaseTokenReceipt = await releaseTokenTransX.wait();
+      console.log("RELEASE TRNX: ", releaseTokenReceipt);
+
+      if (releaseTokenReceipt.status === 1) {
+        // Successfully released
+        // navigate to locked tokens page here...
+        setNavigate(true);
+        setIsHeaderVisible(false);
+      } else {
+        // Error releasing token
+        setErrorMessage("Token release transaction has failed!");
+        setLoadButton(false);
+      }
+    } catch (error) {
+      // Handle error here...
+      setLoadButton(false);
+      setErrorMessage(error.message);
+    }
+  }
+
+  const naviageToSpaceHandler = () => {
+    router.push(`/${manager}/tokens`);
+  }
+
   return (
     <ValidateWalletConnection>
-      <Grid>
-        <Row>
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIFieldCard
-              label={lockedToken && lockedToken.title}
-              labelSize={"1.8rem"}
-              content={lockedToken && lockedToken.token}
-              indicatorColor={
-                lockedToken && `${remainingDays === 0 ? 'green' :
-                  elapsedDays < remainingDays ? 'red' :
-                    elapsedDays >= remainingDays ? 'orange' :
-                      "transparent"}`} />
-          </Column>
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIItemsCard
-              hAlign={"right"}
-              items={[
-                {
-                  content: amount,
-                  color: "#FFAE21",
-                  size: "2rem",
-                  weight: "700"
-                },
+      {
+        navigate ? (
+          <UIInFormationPage
+            header={"Transaction Successful!"}
+            buttonText={"Return to Space"}
+            buttonIcon={"arrow right"}
+            labelPosition={"right"}
+            content={`You have successfully released <span style={${{ color: "white" }}}>${amount}</span> <span style={${{ color: "orange" }}}>${tokenSymbol}</span> to <span style={${{ color: "orange" }}}>${lockedToken.beneficiary}</span>.`}
+            onClickHandler={naviageToSpaceHandler} />
+        ) : (
+          <Grid>
+            <Row>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIFieldCard
+                  label={lockedToken && lockedToken.title}
+                  labelSize={"1.8rem"}
+                  content={lockedToken && lockedToken.token}
+                  indicatorColor={
+                    lockedToken && `${remainingDays === 0 ? 'green' :
+                      elapsedDays < remainingDays ? 'red' :
+                        elapsedDays >= remainingDays ? 'orange' :
+                          "transparent"}`} />
+              </Column>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIItemsCard
+                  hAlign={"right"}
+                  items={[
+                    {
+                      content: amount,
+                      color: "#FFAE21",
+                      size: "2rem",
+                      weight: "700"
+                    },
 
-                {
-                  content: tokenSymbol,
-                  color: "#FFF",
-                  size: "2rem",
-                  weight: "700"
-                },
-              ]} />
-          </Column>
-        </Row>
+                    {
+                      content: tokenSymbol,
+                      color: "#FFF",
+                      size: "2rem",
+                      weight: "700"
+                    },
+                  ]} />
+              </Column>
+            </Row>
 
-        <Row className={styles.customRow}>
-          <Column mobile={16} tablet={16} computer={16}>
-            <Divider className={styles.customDivider} />
-          </Column>
-        </Row>
+            <Row className={styles.customRow}>
+              <Column mobile={16} tablet={16} computer={16}>
+                <Divider className={styles.customDivider} />
+              </Column>
+            </Row>
 
-        <Row>
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIItemsCard
-              label={"Beneficiary"}
-              hAlign={"left"}
-              items={[
-                {
-                  content: lockedToken && lockedToken.beneficiary,
-                  color: "#FFAE21",
-                  size: "1.2rem",
-                  weight: "400",
-                  textDecoration: "underline",
-                }
-              ]} />
-          </Column>
+            <Row>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIItemsCard
+                  label={"Beneficiary"}
+                  hAlign={"left"}
+                  items={[
+                    {
+                      content: lockedToken && lockedToken.beneficiary,
+                      color: "#FFAE21",
+                      size: "1.2rem",
+                      weight: "400",
+                      textDecoration: "underline",
+                    }
+                  ]} />
+              </Column>
 
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIItemsCard
-              label={"Lockdown Date"}
-              hAlign={"right"}
-              items={[
-                {
-                  content: lockedToken && lockdownDate.day,
-                  color: "#FFF",
-                  size: "1.4rem",
-                  weight: "700",
-                },
-                {
-                  content: lockedToken && lockdownDate.month,
-                  color: "#FFF",
-                  size: "1.4rem",
-                  weight: "700",
-                },
-                {
-                  content: lockedToken && lockdownDate.year,
-                  color: "#FFAE21",
-                  size: "1.4rem",
-                  weight: "700",
-                },
-              ]} />
-          </Column>
-        </Row>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIItemsCard
+                  label={"Lockdown Date"}
+                  hAlign={"right"}
+                  items={[
+                    {
+                      content: lockedToken && lockdownDate.day,
+                      color: "#FFF",
+                      size: "1.4rem",
+                      weight: "700",
+                    },
+                    {
+                      content: lockedToken && lockdownDate.month,
+                      color: "#FFF",
+                      size: "1.4rem",
+                      weight: "700",
+                    },
+                    {
+                      content: lockedToken && lockdownDate.year,
+                      color: "#FFAE21",
+                      size: "1.4rem",
+                      weight: "700",
+                    },
+                  ]} />
+              </Column>
+            </Row>
 
-        <Row className={styles.customRow}>
-          <Column mobile={16} tablet={16} computer={16}>
-            <Divider className={styles.customDivider} />
-          </Column>
-        </Row>
+            <Row className={styles.customRow}>
+              <Column mobile={16} tablet={16} computer={16}>
+                <Divider className={styles.customDivider} />
+              </Column>
+            </Row>
 
-        <Row>
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIItemsCard
-              label={"Lockdown Period"}
-              hAlign={"left"}
-              items={[
-                {
-                  content: lockdownPeriod,
-                  color: "#FFAE21",
-                  size: "1.4rem",
-                  weight: "700",
-                },
-                {
-                  content: "Days",
-                  color: "#FFF",
-                  size: "1.4rem",
-                  weight: "700",
-                }
-              ]} />
-          </Column>
+            <Row>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIItemsCard
+                  label={"Lockdown Period"}
+                  hAlign={"left"}
+                  items={[
+                    {
+                      content: lockdownPeriod,
+                      color: "#FFAE21",
+                      size: "1.4rem",
+                      weight: "700",
+                    },
+                    {
+                      content: "Days",
+                      color: "#FFF",
+                      size: "1.4rem",
+                      weight: "700",
+                    }
+                  ]} />
+              </Column>
 
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIItemsCard
-              label={"Remaining Days"}
-              hAlign={"right"}
-              items={[
-                {
-                  content: remainingDays,
-                  color: "#FFAE21",
-                  size: "1.4rem",
-                  weight: "700",
-                },
-                {
-                  content: "Days",
-                  color: "#FFF",
-                  size: "1.4rem",
-                  weight: "700",
-                }
-              ]} />
-          </Column>
-        </Row>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIItemsCard
+                  label={"Remaining Days"}
+                  hAlign={"right"}
+                  items={[
+                    {
+                      content: remainingDays,
+                      color: "#FFAE21",
+                      size: "1.4rem",
+                      weight: "700",
+                    },
+                    {
+                      content: "Days",
+                      color: "#FFF",
+                      size: "1.4rem",
+                      weight: "700",
+                    }
+                  ]} />
+              </Column>
+            </Row>
 
-        <Row className={styles.customRow}>
-          <Column mobile={16} tablet={16} computer={16}>
-            <Divider className={styles.customDivider} />
-          </Column>
-        </Row>
+            <Row className={styles.customRow}>
+              <Column mobile={16} tablet={16} computer={16}>
+                <Divider className={styles.customDivider} />
+              </Column>
+            </Row>
 
-        <Row>
-          <Column mobile={16} tablet={8} computer={8}>
-            <UIButton
-              disabled={remainingDays > 0}
-              icon={"unlock"}
-              labelPosition={"left"}
-              content={"Release Token"} />
-          </Column>
-        </Row>
-      </Grid>
-    </ValidateWalletConnection> 
+            <Row>
+              <Column mobile={16} tablet={8} computer={8}>
+                <UIButton
+                  disabled={remainingDays > 0 || loadButton}
+                  loading={loadButton}
+                  icon={"unlock"}
+                  labelPosition={"left"}
+                  content={"Release Token"}
+                  onClickHandler={releaseFundHandler} />
+              </Column>
+            </Row>
+            {
+              errorMessage && (<Row>
+                <Column mobile={16} tablet={16} computer={16}>
+                  <UIMessage
+                    error
+                    content={errorMessage} />
+                </Column>
+              </Row>)
+            }
+          </Grid>
+        )
+      }
+    </ValidateWalletConnection>
   );
 }
 

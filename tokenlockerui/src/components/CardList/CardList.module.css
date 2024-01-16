@@ -24,6 +24,12 @@
   cursor          : pointer;
 }
 
+.item.disabled {
+  pointer-events: none;
+  opacity       : 0.5;
+  user-select   : none;
+}
+
 /*Devices larger than mobile phone*/
 @media (min-width: 576px) {
   .cardList {

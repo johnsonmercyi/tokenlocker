@@ -11,20 +11,21 @@ const CardList = ({ data = [], ...props }) => {
   const router = useRouter();
   const { manager } = router.query;
 
-  const onClickHandler = (lockedToken) => {
+  const onClickHandler = (lockedToken, index) => {
+    // console.log("TTTTT: ", lockedToken);
     setSelectedLockedToken(lockedToken);
-    router.push(`/${manager}/tokens/${lockedToken.token}`)
+    router.push(`/${manager}/tokens/${lockedToken.index}`)
   }
 
   return (
     <div className={`${styles.cardList}`}>
       {
-        data.map((tokenObj, index) => {
+        data.map((item, index) => ({index, ...item})).reverse().map((tokenObj, index) => {
           return (
             <div
-              className={styles.item}
-              key={tokenObj.beneficiary + "_" + index}
-              onClick={() => onClickHandler(tokenObj)}>
+              className={`${styles.item}  ${tokenObj.isReleased ? styles.disabled : '' }`}
+              key={tokenObj.beneficiary + "_" + tokenObj.index}
+              onClick={() => onClickHandler(tokenObj, tokenObj.index)}>
 
               <UICard
                 title={tokenObj.title}
