@@ -18,7 +18,7 @@ const Header = ({ ...props }) => {
     }}>
       <Link href={`/${manager}/tokens`} style={{ color: "white" }}>
         <AppLogo
-          title={"Lockers Space"}
+          title={"TheLockerSpace"}
           width={"3rem"}
           height={"3rem"} />
       </Link>

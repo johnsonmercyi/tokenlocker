@@ -130,8 +130,8 @@ export default function Home() {
         <div className={styles.logo}>
           <AppLogo
             title={"TheLockerSpace"}
-            titleSize={"1.7rem"}
-            titleWeight={"300"}
+            titleSize={"1.5rem"}
+            titleWeight={"600"}
             color={"orange"}
             width={"4rem"}
             height={"5rem"} />

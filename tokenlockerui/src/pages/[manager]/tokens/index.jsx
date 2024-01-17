@@ -151,7 +151,7 @@ const ShowTokenLockerSpace = (props) => {
         {
           (lockedTokens.length > 0 
           && !dataLoading 
-          && walletProvider) ? (<h1>Locked Tokens</h1>) : null
+          && walletProvider) ? (<h1>Locker Space</h1>) : null
         }
 
         {/* CardList container Cards */}
