@@ -13,10 +13,11 @@ import {
   useWeb3ModalProvider
 } from '@web3modal/ethers/react';
 import UIButton from '@/components/UI/UIButton/UIButton';
-import UIMessage from '@/components/UI/UIMessage';
+import UIMessage from '@/components/UI/UIMessage/UIMessage';
 import factoryInstance from '@/ethereum/config/Factory';
 import tokenLockerInstance from '@/ethereum/config/TokenLocker';
 import { useGlobalState } from '@/ethereum/config/context/GlobalStateContext';
+import parse from 'html-react-parser';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,13 +28,15 @@ export default function Home() {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
   const router = useRouter();
-  const { 
+  const {
     isHeaderVisible, setIsHeaderVisible,
-    setTokenLockerAddress, setValidWalletForThisPage 
+    setTokenLockerAddress, setValidWalletForThisPage
   } = useGlobalState();
 
   const [loginLoading, setLoginLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageHeader, setMessageHeader] = useState('');
   const [clientReady, setClientReady] = useState(false);
 
   useEffect(() => {
@@ -75,10 +78,14 @@ export default function Home() {
         } else {
           // If not a manager, create a new TokenLocker
           const createTokenLockerTx = await factory.createTokenLocker(managerAddress, '');
+          const transactionHash = createTokenLockerTx.hash;
 
           // Fetch the TokenLocker address
           const tokenLockerAddress = await factory.getDeployedTokenLocker(managerAddress);
-
+          
+          setMessageHeader("Token Locker Space Created!");
+          setMessage(`Awaiting confirmation...<br><span style="font-weight: 600">Transaction Hash:</span> ${transactionHash}`);
+          setMessageType("success");
           // Wait for the transaction receipt
           const receipt = await createTokenLockerTx.wait();
         }
@@ -88,7 +95,13 @@ export default function Home() {
         throw Error("Your wallet hasn't been connected yet!");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      if (String(error.message).includes("code=ACTION_REJECTED")) {
+        setMessage("Sorry! The signer has rejected the approval of this transaction.");
+        setMessageType("error");
+      } else {
+        setMessage(error.message);
+        setMessageType("error");
+      }
       setLoginLoading(false)
     }
   }
@@ -97,7 +110,8 @@ export default function Home() {
     try {
       open();
     } catch (error) {
-      setErrorMessage(error.message);
+      setMessage(error.message);
+      setMessageType("error");
     }
   }
 
@@ -127,7 +141,7 @@ export default function Home() {
           <UIForm
             style={{ width: "100%" }}
             onSubmit={onSubmitHandler}
-            error={!!errorMessage}>
+            error={!!message}>
 
             <UIField
               // disabled={!isConnected}
@@ -156,8 +170,9 @@ export default function Home() {
             }
 
             <UIMessage
-              error
-              content={errorMessage} />
+              header={messageHeader}
+              type={messageType}
+              content={parse(message)} />
 
           </UIForm>
         </div>

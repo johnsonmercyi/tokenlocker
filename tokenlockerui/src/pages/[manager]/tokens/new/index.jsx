@@ -6,7 +6,7 @@ import UIField from "@/components/Form/UIInput/UIInput";
 import { Grid } from "semantic-ui-react";
 import UISelect from "@/components/Form/UISelect/UISelect";
 import UIButton from "@/components/UI/UIButton/UIButton";
-import UIMessage from "@/components/UI/UIMessage";
+import UIMessage from "@/components/UI/UIMessage/UIMessage";
 import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
 import tokenInstance from "@/ethereum/config/ERC20";
 import factoryInstance from "@/ethereum/config/Factory";
@@ -15,6 +15,7 @@ import UIModal from "@/components/UIModal/UIModal";
 import ValidateWalletConnection from "@/components/WalletConnectionValidator/ValidateWalletConnection";
 import UIInFormationPage from "@/components/UIInFormationPage/UIInFormationPage";
 import { useRouter } from "next/router";
+import parse from 'html-react-parser';
 
 export async function getServerSideProps(props) {
   const { manager } = props.query;
@@ -47,7 +48,9 @@ const LockNewToken = (props) => {
   const [lockdownPeriod, setLockdownPeriod] = useState("");
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageHeader, setMessageHeader] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogHeader, setDialogHeader] = useState("");
   const [dialogContent, setDialogContent] = useState("");
@@ -65,7 +68,8 @@ const LockNewToken = (props) => {
       setLoading(false);
       setOpenDialog(false);
     } catch (error) {
-      setErrorMessage(error.message);
+      setMessageType("error");
+      setMessage(error.message);
     }
   }
 
@@ -86,7 +90,7 @@ const LockNewToken = (props) => {
   }
 
   const onAmountChangedHandler = (event, { value }) => {
-    setErrorMessage("");
+    setMessage("");
     try {
       if (value) {
         const amount = Number(value);
@@ -99,12 +103,13 @@ const LockNewToken = (props) => {
         setAmount(value);
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      setMessage(error.message);
+      setMessageType("error");
     }
   }
 
   const onLockdownPeriodChangedHandler = (event, { value }) => {
-    setErrorMessage("");
+    setMessage("");
     try {
       if (value) {
         const period = Number(value);
@@ -117,7 +122,8 @@ const LockNewToken = (props) => {
         setLockdownPeriod(value);
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      setMessage(error.message);
+      setMessageType("error");
     }
   }
 
@@ -135,7 +141,7 @@ const LockNewToken = (props) => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    setErrorMessage("");
+    setMessage("");
     setLoading(true);
     setDisabled(true);
 
@@ -193,6 +199,10 @@ const LockNewToken = (props) => {
             // Handle the event data as needed
           });
 
+          setMessageHeader("Token Locked!");
+          setMessage(`Awaiting confirmation...<br><span style="font-weight: 600">Transaction Hash:</span> ${depositTransactionHash}`);
+          setMessageType("success");
+
           // Wait for the transaction to be mined
           const depositReceipt = await depositTransaction.wait();
 
@@ -206,14 +216,16 @@ const LockNewToken = (props) => {
         // navigate to locked tokens page here...
         setNavigate(true);
         setIsHeaderVisible(false);
-        
+
       }
 
     } catch (error) {
       if (String(error.message).includes("code=ACTION_REJECTED")) {
-        setErrorMessage("Sorry! The signer has rejected the approval of this transaction.");
+        setMessage("Sorry! The signer has rejected the approval of this transaction.");
+        setMessageType("error");
       } else {
-        setErrorMessage(error.message);
+        setMessage(error.message);
+        setMessageType("error");
       }
       setLoading(false);
       setDisabled(false);
@@ -227,21 +239,21 @@ const LockNewToken = (props) => {
   return (
     <ValidateWalletConnection>
       <div style={{ width: "90%", margin: "auto" }}>
-        
+
         {
           navigate ?
             (<UIInFormationPage
-              header={"Transaction Successfull"}
+              header={"Transaction Successful!"}
               buttonText={"Goto Space"}
               buttonIcon={"arrow right"}
               labelPosition={"right"}
-              content={"You have successfully locked a new token. Please note that you'll find your new locked token displayed on your locked token space as soon as your transaction is confirmed."}
+              content={"You have successfully locked a new token. You'll find your new locked token displayed on your space."}
               onClickHandler={naviageToSpaceHandler} />) :
             (
               <>
                 <h1>Lock New Token</h1>
                 <UIForm
-                  error={!!errorMessage}
+                  error={!!message}
                   onSubmit={onSubmitHandler}>
                   <Grid>
                     <Row>
@@ -291,11 +303,12 @@ const LockNewToken = (props) => {
                     </Row>
 
                     {
-                      errorMessage && (<Row>
+                      message && (<Row>
                         <Column mobile={16} tablet={16} computer={16}>
                           <UIMessage
-                            error
-                            content={errorMessage} />
+                            header={messageHeader}
+                            type={messageType}
+                            content={parse(message)} />
                         </Column>
                       </Row>)
                     }

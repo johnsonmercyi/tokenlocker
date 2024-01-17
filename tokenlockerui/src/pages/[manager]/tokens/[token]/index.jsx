@@ -20,9 +20,10 @@ import UIButton from "@/components/UI/UIButton/UIButton";
 import ValidateWalletConnection from "@/components/WalletConnectionValidator/ValidateWalletConnection";
 import { useRouter } from "next/router";
 import tokenLockerInstance from "@/ethereum/config/TokenLocker";
-import UIMessage from "@/components/UI/UIMessage";
+import UIMessage from "@/components/UI/UIMessage/UIMessage";
 import UIInFormationPage from "@/components/UIInFormationPage/UIInFormationPage";
 import factoryInstance from "@/ethereum/config/Factory";
+import parse from 'html-react-parser';
 
 const ViewLockedToken = ({ ...props }) => {
   const { selectedLockedToken, setIsHeaderVisible } = useGlobalState();
@@ -37,8 +38,10 @@ const ViewLockedToken = ({ ...props }) => {
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [amount, setAmount] = useState(0);
   const [lockdownPeriod, setLockdownPeriod] = useState(0);
-  const [navigate, setNavigate] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [navigate, setNavigate] = useState(true);
+  const [messageType, setMessageType] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageHeader, setMessageHeader] = useState("");
   const [loadButton, setLoadButton] = useState(false);
   const { Row, Column } = Grid;
 
@@ -84,13 +87,13 @@ const ViewLockedToken = ({ ...props }) => {
     try {
 
       setLoadButton(true);
-      setErrorMessage("");
+      setMessage("");
       // console.log("LOCKED TOKEN: ", lockedToken);
       const factory = await factoryInstance(walletProvider);
       const tokenLockerAddress = await factory.getDeployedTokenLocker(manager);
       const tokenLocker = await tokenLockerInstance(tokenLockerAddress, walletProvider);
 
-      // const lockedT = await tokenLocker.lockedTokens(lockedToken.index);
+      const lockedT = await tokenLocker.lockedTokens(lockedToken.index);
 
       // console.log("TOKEN LOCKER ADDRESS: ", tokenLockerAddress);
       // console.log("TOKEN LOCKER: ", tokenLocker);
@@ -99,7 +102,12 @@ const ViewLockedToken = ({ ...props }) => {
 
       const releaseTokenTransX = await tokenLocker.release(lockedToken.index);
 
-      
+      const releaseTransactionHash = releaseTokenTransX.hash;
+
+      setMessageHeader("Token Release!");
+      setMessage(`Awaiting confirmation...<br><span style="font-weight: 600">Transaction Hash:</span> ${releaseTransactionHash}`);
+      setMessageType("success");
+
       // Wait for the transaction to be mined
       const releaseTokenReceipt = await releaseTokenTransX.wait();
       console.log("RELEASE TRNX: ", releaseTokenReceipt);
@@ -111,13 +119,15 @@ const ViewLockedToken = ({ ...props }) => {
         setIsHeaderVisible(false);
       } else {
         // Error releasing token
-        setErrorMessage("Token release transaction has failed!");
+        setMessage("Token release transaction has failed!");
+        setMessageType("error");
         setLoadButton(false);
       }
     } catch (error) {
       // Handle error here...
       setLoadButton(false);
-      setErrorMessage(error.message);
+      setMessage(error.message);
+      setMessageType("error");
     }
   }
 
@@ -134,7 +144,7 @@ const ViewLockedToken = ({ ...props }) => {
             buttonText={"Return to Space"}
             buttonIcon={"arrow right"}
             labelPosition={"right"}
-            content={`You have successfully released <span style={${{ color: "white" }}}>${amount}</span> <span style={${{ color: "orange" }}}>${tokenSymbol}</span> to <span style={${{ color: "orange" }}}>${lockedToken.beneficiary}</span>.`}
+            content={parse(`You have successfully released <span style="font-weight: 600">${amount}</span> <span style="color: orange; font-weight: 600;">${tokenSymbol}</span> to the beneficiary <span style="color: orange; text-decoration: underline">${lockedToken && lockedToken.beneficiary}</span>.`)}
             onClickHandler={naviageToSpaceHandler} />
         ) : (
           <Grid>
@@ -286,11 +296,12 @@ const ViewLockedToken = ({ ...props }) => {
               </Column>
             </Row>
             {
-              errorMessage && (<Row>
+              message && (<Row>
                 <Column mobile={16} tablet={16} computer={16}>
                   <UIMessage
-                    error
-                    content={errorMessage} />
+                    header={messageHeader}
+                    type={messageType}
+                    content={parse(message)} />
                 </Column>
               </Row>)
             }
