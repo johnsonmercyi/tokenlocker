@@ -1,3 +1,4 @@
+import AppLogo from "@/util/Logo";
 import Head from 'next/head';
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
@@ -111,8 +112,17 @@ export default function Home() {
       </Head>
 
       <main className={`${styles.main} ${inter.className}`}>
+        <div className={styles.logo}>
+          <AppLogo
+            title={"LockerSpace"}
+            titleSize={"1.7rem"}
+            titleWeight={"300"}
+            color={"orange"}
+            width={"4rem"}
+            height={"5rem"} />
+        </div>
         <div className={styles.formWrapper}>
-          <h1>The Locker Space</h1>
+          {/* <h1>The Locker Space</h1> */}
           <UIForm
             style={{ width: "100%" }}
             onSubmit={onSubmitHandler}

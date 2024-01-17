@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/jsx-props-no-spreading
 import React from "react";
 
-const AppLogo = ({ height, width, title }) => {
+const AppLogo = ({ height, width, title, color, titleSize, titleWeight }) => {
   return (
     <div style={{
       width: "fit-content",
@@ -48,7 +48,12 @@ const AppLogo = ({ height, width, title }) => {
           style={{ fill: "#4577bb" }} />
 
       </svg>
-      <div>{title}</div>
+      <div style={{
+        margin: "1rem 0 0 0",
+        color: color || "white",
+        fontSize: titleSize || "1rem",
+        fontWeight: titleWeight || "normal"
+      }}>{title}</div>
     </div>
   );
 }
