@@ -38,7 +38,7 @@ const ViewLockedToken = ({ ...props }) => {
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [amount, setAmount] = useState(0);
   const [lockdownPeriod, setLockdownPeriod] = useState(0);
-  const [navigate, setNavigate] = useState(true);
+  const [navigate, setNavigate] = useState(false);
   const [messageType, setMessageType] = useState("");
   const [message, setMessage] = useState("");
   const [messageHeader, setMessageHeader] = useState("");
