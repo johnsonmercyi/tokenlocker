@@ -26,6 +26,7 @@ const UIItemsCard = ({ label, hAlign, items = [{
             <span
               key={`item_${i}`}
               style={{
+                wordBreak: "break-all",
                 color: item.color,
                 fontSize: item.size,
                 fontWeight: item.weight,

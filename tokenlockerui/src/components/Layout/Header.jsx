@@ -32,8 +32,8 @@ const Header = ({ ...props }) => {
         <Link href={`/${manager}/tokens`} style={{ color: "white" }}>
           <UIButton
             rounded_left
-            content={"Locked Tokens"}
-            icon={"lock"}
+            content={"Space"}
+            icon={"block layout"}
             labelPosition={"left"} />
         </Link>
 

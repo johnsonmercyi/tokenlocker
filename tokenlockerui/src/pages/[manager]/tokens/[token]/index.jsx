@@ -137,177 +137,179 @@ const ViewLockedToken = ({ ...props }) => {
 
   return (
     <ValidateWalletConnection>
-      {
-        navigate ? (
-          <UIInFormationPage
-            header={"Transaction Successful!"}
-            buttonText={"Return to Space"}
-            buttonIcon={"arrow right"}
-            labelPosition={"right"}
-            content={parse(`You have successfully released <span style="font-weight: 600">${amount}</span> <span style="color: orange; font-weight: 600;">${tokenSymbol}</span> to the beneficiary <span style="color: orange; text-decoration: underline">${lockedToken && lockedToken.beneficiary}</span>.`)}
-            onClickHandler={naviageToSpaceHandler} />
-        ) : (
-          <Grid>
-            <Row>
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIFieldCard
-                  label={lockedToken && lockedToken.title}
-                  labelSize={"1.8rem"}
-                  content={lockedToken && lockedToken.token}
-                  indicatorColor={
-                    lockedToken && `${remainingDays === 0 ? 'green' :
-                      elapsedDays < remainingDays ? 'red' :
-                        elapsedDays >= remainingDays ? 'orange' :
-                          "transparent"}`} />
-              </Column>
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIItemsCard
-                  hAlign={"right"}
-                  items={[
-                    {
-                      content: amount,
-                      color: "#FFAE21",
-                      size: "2rem",
-                      weight: "700"
-                    },
-
-                    {
-                      content: tokenSymbol,
-                      color: "#FFF",
-                      size: "2rem",
-                      weight: "700"
-                    },
-                  ]} />
-              </Column>
-            </Row>
-
-            <Row className={styles.customRow}>
-              <Column mobile={16} tablet={16} computer={16}>
-                <Divider className={styles.customDivider} />
-              </Column>
-            </Row>
-
-            <Row>
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIItemsCard
-                  label={"Beneficiary"}
-                  hAlign={"left"}
-                  items={[
-                    {
-                      content: lockedToken && lockedToken.beneficiary,
-                      color: "#FFAE21",
-                      size: "1.2rem",
-                      weight: "400",
-                      textDecoration: "underline",
-                    }
-                  ]} />
-              </Column>
-
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIItemsCard
-                  label={"Lockdown Date"}
-                  hAlign={"right"}
-                  items={[
-                    {
-                      content: lockedToken && lockdownDate.day,
-                      color: "#FFF",
-                      size: "1.4rem",
-                      weight: "700",
-                    },
-                    {
-                      content: lockedToken && lockdownDate.month,
-                      color: "#FFF",
-                      size: "1.4rem",
-                      weight: "700",
-                    },
-                    {
-                      content: lockedToken && lockdownDate.year,
-                      color: "#FFAE21",
-                      size: "1.4rem",
-                      weight: "700",
-                    },
-                  ]} />
-              </Column>
-            </Row>
-
-            <Row className={styles.customRow}>
-              <Column mobile={16} tablet={16} computer={16}>
-                <Divider className={styles.customDivider} />
-              </Column>
-            </Row>
-
-            <Row>
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIItemsCard
-                  label={"Lockdown Period"}
-                  hAlign={"left"}
-                  items={[
-                    {
-                      content: lockdownPeriod,
-                      color: "#FFAE21",
-                      size: "1.4rem",
-                      weight: "700",
-                    },
-                    {
-                      content: "Days",
-                      color: "#FFF",
-                      size: "1.4rem",
-                      weight: "700",
-                    }
-                  ]} />
-              </Column>
-
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIItemsCard
-                  label={"Remaining Days"}
-                  hAlign={"right"}
-                  items={[
-                    {
-                      content: remainingDays,
-                      color: "#FFAE21",
-                      size: "1.4rem",
-                      weight: "700",
-                    },
-                    {
-                      content: "Days",
-                      color: "#FFF",
-                      size: "1.4rem",
-                      weight: "700",
-                    }
-                  ]} />
-              </Column>
-            </Row>
-
-            <Row className={styles.customRow}>
-              <Column mobile={16} tablet={16} computer={16}>
-                <Divider className={styles.customDivider} />
-              </Column>
-            </Row>
-
-            <Row>
-              <Column mobile={16} tablet={8} computer={8}>
-                <UIButton
-                  disabled={remainingDays > 0 || loadButton}
-                  loading={loadButton}
-                  icon={"unlock"}
-                  labelPosition={"left"}
-                  content={"Release Token"}
-                  onClickHandler={releaseFundHandler} />
-              </Column>
-            </Row>
-            {
-              message && (<Row>
-                <Column mobile={16} tablet={16} computer={16}>
-                  <UIMessage
-                    header={messageHeader}
-                    type={messageType}
-                    content={parse(message)} />
+      <div style={{ width: "90%", margin: "auto" }}>
+        {
+          navigate ? (
+            <UIInFormationPage
+              header={"Transaction Successful!"}
+              buttonText={"Return to Space"}
+              buttonIcon={"arrow right"}
+              labelPosition={"right"}
+              content={parse(`You have successfully released <span style="font-weight: 600">${amount}</span> <span style="color: orange; font-weight: 600;">${tokenSymbol}</span> to the beneficiary <span style="color: orange; text-decoration: underline">${lockedToken && lockedToken.beneficiary}</span>.`)}
+              onClickHandler={naviageToSpaceHandler} />
+          ) : (
+            <Grid>
+              <Row>
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIFieldCard
+                    label={lockedToken && lockedToken.title}
+                    labelSize={"1.8rem"}
+                    content={lockedToken && lockedToken.token}
+                    indicatorColor={
+                      lockedToken && `${remainingDays === 0 ? 'green' :
+                        elapsedDays < remainingDays ? 'red' :
+                          elapsedDays >= remainingDays ? 'orange' :
+                            "transparent"}`} />
                 </Column>
-              </Row>)
-            }
-          </Grid>
-        )
-      }
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIItemsCard
+                    hAlign={"right"}
+                    items={[
+                      {
+                        content: amount,
+                        color: "#FFAE21",
+                        size: "2rem",
+                        weight: "700"
+                      },
+
+                      {
+                        content: tokenSymbol,
+                        color: "#FFF",
+                        size: "2rem",
+                        weight: "700"
+                      },
+                    ]} />
+                </Column>
+              </Row>
+
+              <Row className={styles.customRow}>
+                <Column mobile={16} tablet={16} computer={16}>
+                  <Divider className={styles.customDivider} />
+                </Column>
+              </Row>
+
+              <Row>
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIItemsCard
+                    label={"Beneficiary"}
+                    hAlign={"left"}
+                    items={[
+                      {
+                        content: lockedToken && lockedToken.beneficiary,
+                        color: "#FFAE21",
+                        size: "1.2rem",
+                        weight: "400",
+                        textDecoration: "underline",
+                      }
+                    ]} />
+                </Column>
+
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIItemsCard
+                    label={"Lockdown Date"}
+                    hAlign={"right"}
+                    items={[
+                      {
+                        content: lockedToken && lockdownDate.day,
+                        color: "#FFF",
+                        size: "1.4rem",
+                        weight: "700",
+                      },
+                      {
+                        content: lockedToken && lockdownDate.month,
+                        color: "#FFF",
+                        size: "1.4rem",
+                        weight: "700",
+                      },
+                      {
+                        content: lockedToken && lockdownDate.year,
+                        color: "#FFAE21",
+                        size: "1.4rem",
+                        weight: "700",
+                      },
+                    ]} />
+                </Column>
+              </Row>
+
+              <Row className={styles.customRow}>
+                <Column mobile={16} tablet={16} computer={16}>
+                  <Divider className={styles.customDivider} />
+                </Column>
+              </Row>
+
+              <Row>
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIItemsCard
+                    label={"Lockdown Period"}
+                    hAlign={"left"}
+                    items={[
+                      {
+                        content: lockdownPeriod,
+                        color: "#FFAE21",
+                        size: "1.4rem",
+                        weight: "700",
+                      },
+                      {
+                        content: "Days",
+                        color: "#FFF",
+                        size: "1.4rem",
+                        weight: "700",
+                      }
+                    ]} />
+                </Column>
+
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIItemsCard
+                    label={"Remaining Days"}
+                    hAlign={"right"}
+                    items={[
+                      {
+                        content: remainingDays,
+                        color: "#FFAE21",
+                        size: "1.4rem",
+                        weight: "700",
+                      },
+                      {
+                        content: "Days",
+                        color: "#FFF",
+                        size: "1.4rem",
+                        weight: "700",
+                      }
+                    ]} />
+                </Column>
+              </Row>
+
+              <Row className={styles.customRow}>
+                <Column mobile={16} tablet={16} computer={16}>
+                  <Divider className={styles.customDivider} />
+                </Column>
+              </Row>
+
+              <Row>
+                <Column mobile={16} tablet={8} computer={8}>
+                  <UIButton
+                    disabled={remainingDays > 0 || loadButton}
+                    loading={loadButton}
+                    icon={"unlock"}
+                    labelPosition={"left"}
+                    content={"Release Token"}
+                    onClickHandler={releaseFundHandler} />
+                </Column>
+              </Row>
+              {
+                message && (<Row>
+                  <Column mobile={16} tablet={16} computer={16}>
+                    <UIMessage
+                      header={messageHeader}
+                      type={messageType}
+                      content={parse(message)} />
+                  </Column>
+                </Row>)
+              }
+            </Grid>
+          )
+        }
+      </div>
     </ValidateWalletConnection>
   );
 }

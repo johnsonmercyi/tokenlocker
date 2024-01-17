@@ -10,7 +10,7 @@ const UIButton = ({ type, content, icon, labelPosition, onClickHandler, rounded,
       ${rounded_left && styles.rounded_left} 
       ${rounded_right && styles.rounded_right} 
     `}
-    size='large'
+    size='big'
     type={type || "button"}
     content={content}
     icon={icon && icon}
