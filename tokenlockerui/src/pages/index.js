@@ -52,6 +52,7 @@ export default function Home() {
     try {
       if (isConnected) {
         setLoginLoading(true);
+
         // Fetch factory instance
         const factory = await factoryInstance(walletProvider);
 
@@ -104,6 +105,7 @@ export default function Home() {
     setManagerAddress(event.target.value);
   }
 
+  // Render component children
   return (
     <>
       <Head>
