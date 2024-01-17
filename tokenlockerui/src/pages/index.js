@@ -52,7 +52,6 @@ export default function Home() {
     try {
       if (isConnected) {
         setLoginLoading(true);
-
         // Fetch factory instance
         const factory = await factoryInstance(walletProvider);
 
