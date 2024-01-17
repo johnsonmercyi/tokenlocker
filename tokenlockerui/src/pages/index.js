@@ -115,7 +115,7 @@ export default function Home() {
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.logo}>
           <AppLogo
-            title={"LockerSpace"}
+            title={"TheLockerSpace"}
             titleSize={"1.7rem"}
             titleWeight={"300"}
             color={"orange"}
