@@ -37,6 +37,7 @@
   text-align: left;
   color: #FFAE21;
   text-decoration: underline;
+  word-break: break-all;
 }
 
 /*Devices larger than mobile phone*/

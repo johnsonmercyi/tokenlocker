@@ -1,0 +1,44 @@
+/*Mobile First Style*/
+.header {
+  height         : 5rem;
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+  align-items    : center;
+}
+
+.appLogo {
+  display: none;
+}
+
+.spaceBtn,
+.lockNewBtn {
+  width: 100%;
+}
+
+.buttonsWrapper {
+  width: 100%;
+}
+
+/*Devices larger than mobile phone*/
+@media (min-width: 576px) {
+  .header {
+    height : auto;
+    padding: 0.5rem 0;
+    flex-direction : row;
+    justify-content: space-between;
+  }
+
+  .appLogo {
+    display: initial;
+  }
+
+  .spaceBtn,
+  .lockNewBtn {
+    width: fit-content;
+  }
+
+  .buttonsWrapper {
+    width: fit-content;
+  }
+}
