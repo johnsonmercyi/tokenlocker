@@ -26,20 +26,23 @@ const ValidateWalletConnection = ({ children, ...props }) => {
     try {
       console.log("WALLECT CONNECTED: ", walletProvider, isConnected);
       if (!walletProvider && !isConnected) {
-        console.log("Client not ready");
-        setIsHeaderVisible(false);
-        setIndeterminateLoader(true);
-        setLoaderMessage("Waiting for wallet reconnection...");
-  
-        setOpenDialog(true);
-        setDialogHeader("Wallet Disconnected!");
-        setDialogContent("Your wallet is disconnected. Please click the button below to try reconnecting your wallet.");
-        setDialogButtonText("Connect Wallet");
-        setDialogButtonIcon("google wallet");
-        setDialogHeaderIcon("unlink");
-        setDialogHeaderColor("red");
-  
-        setClientReady(false);
+        setTimeout(()=> {
+          console.log("Client not ready");
+          setIsHeaderVisible(false);
+          setIndeterminateLoader(true);
+          setLoaderMessage("Waiting for wallet reconnection...");
+    
+          setOpenDialog(true);
+          setDialogHeader("Wallet Disconnected!");
+          setDialogContent("Your wallet is disconnected. Please click the button below to try reconnecting your wallet.");
+          setDialogButtonText("Connect Wallet");
+          setDialogButtonIcon("google wallet");
+          setDialogHeaderIcon("unlink");
+          setDialogHeaderColor("red");
+    
+          setClientReady(false);
+
+        }, 1000);
       } else {
         console.log("Client is ready");
         setIsHeaderVisible(true);
