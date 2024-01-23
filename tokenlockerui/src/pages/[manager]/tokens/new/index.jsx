@@ -157,6 +157,7 @@ const LockNewToken = (props) => {
         setDialogHeaderIcon("unlink");
         setDialogHeaderColor("red");
       } else {
+        
         const bigIntAmount = BigInt(amount);
         const amountToApprove = bigIntAmount * (10n ** 18n);
 

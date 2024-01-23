@@ -98,6 +98,9 @@ export default function Home() {
       if (String(error.message).includes("code=ACTION_REJECTED")) {
         setMessage("Sorry! The signer has rejected the approval of this transaction.");
         setMessageType("error");
+      } else if (String(error.message).includes("code=BAD_DATA") || String(error.message).includes("could not decode result data")) {
+        setMessage("Sorry! Please check your wallet to ensure you have the <strong>Sepolia</strong> testnet selected.");
+        setMessageType("error");
       } else {
         setMessage(error.message);
         setMessageType("error");
