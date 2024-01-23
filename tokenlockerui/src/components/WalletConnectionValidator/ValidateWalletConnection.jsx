@@ -24,11 +24,10 @@ const ValidateWalletConnection = ({ children, ...props }) => {
 
   useEffect(() => {
     try {
-      console.log("WALLECT CONNECTED: ", walletProvider, isConnected);
-      
       if (!walletProvider && !isConnected) {
 
         setTimeout(()=> {
+          console.log("WALLECT CONNECTED: ", walletProvider, isConnected);
           if (!walletProvider) {
             console.log("Client not yet ready!");
             setIsHeaderVisible(false);
