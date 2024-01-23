@@ -24,27 +24,24 @@ const ValidateWalletConnection = ({ children, ...props }) => {
 
   useEffect(() => {
     try {
+      console.log("WALLECT CONNECTED: ", walletProvider, isConnected);
+      
       if (!walletProvider && !isConnected) {
-
-        setTimeout(()=> {
-          console.log("WALLECT CONNECTED: ", walletProvider, isConnected);
-          if (!walletProvider) {
-            console.log("Client not yet ready!");
-            setIsHeaderVisible(false);
-            setIndeterminateLoader(true);
-            setLoaderMessage("Waiting for wallet reconnection...");
-      
-            setOpenDialog(true);
-            setDialogHeader("Wallet Disconnected!");
-            setDialogContent("Your wallet is disconnected. Please click the button below to try reconnecting your wallet.");
-            setDialogButtonText("Connect Wallet");
-            setDialogButtonIcon("google wallet");
-            setDialogHeaderIcon("unlink");
-            setDialogHeaderColor("red");
-      
-            setClientReady(false);
-          }
-        }, 3000);
+        
+        console.log("Client not ready");
+        setIsHeaderVisible(false);
+        setIndeterminateLoader(true);
+        setLoaderMessage("Waiting for wallet reconnection...");
+  
+        setOpenDialog(true);
+        setDialogHeader("Wallet Disconnected!");
+        setDialogContent("Your wallet is disconnected. Please click the button below to try reconnecting your wallet.");
+        setDialogButtonText("Connect Wallet");
+        setDialogButtonIcon("google wallet");
+        setDialogHeaderIcon("unlink");
+        setDialogHeaderColor("red");
+  
+        setClientReady(false);
       } else {
         console.log("Client is ready");
         setIsHeaderVisible(true);
@@ -54,6 +51,18 @@ const ValidateWalletConnection = ({ children, ...props }) => {
       alert(error.message);
     }
   }, [walletProvider, isConnected]);
+
+  useEffect(()=> {
+    if (isConnected) {
+      setOpenDialog(false);
+      setIsHeaderVisible(true);
+      setIndeterminateLoader(false);
+      setLoaderMessage("");
+
+      setClientReady(true);
+
+    }
+  }, [isConnected]);
 
   const onConnectWalletHandler = (event) => {
     try {
