@@ -25,8 +25,8 @@ const ValidateWalletConnection = ({ children, ...props }) => {
   useEffect(() => {
     try {
       console.log("WALLECT CONNECTED: ", walletProvider, isConnected);
-      if (!walletProvider && !isConnected) {
-        setTimeout(()=> {
+      setTimeout(()=> {
+        if (!walletProvider && !isConnected) {
           console.log("Client not ready");
           setIsHeaderVisible(false);
           setIndeterminateLoader(true);
@@ -41,13 +41,12 @@ const ValidateWalletConnection = ({ children, ...props }) => {
           setDialogHeaderColor("red");
     
           setClientReady(false);
-
-        }, 1000);
-      } else {
-        console.log("Client is ready");
-        setIsHeaderVisible(true);
-        setClientReady(true);
-      }
+        } else {
+          console.log("Client is ready");
+          setIsHeaderVisible(true);
+          setClientReady(true);
+        }
+      }, 1000);
     } catch (error) {
       alert(error.message);
     }
